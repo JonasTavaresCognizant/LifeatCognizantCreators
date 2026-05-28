@@ -1,0 +1,1793 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Cognizant Ambassadors — Global Expansion Dashboard</title>
+<style>
+:root {
+  --black:      #000000;
+  --deep:       #080510;
+  --surface:    #0e0818;
+  --surface2:   #120a1e;
+  --surface3:   #180e28;
+  --border:     rgba(255,255,255,.08);
+  --border2:    rgba(255,255,255,.14);
+  --purple:     #5B1FBF;
+  --purple2:    #8B45E0;
+  --blue:       #2040C8;
+  --blue2:      #4A6FE8;
+  --cyan:       #C8388A;
+  --cyan2:      #E8508A;
+  --accent:     #E04060;
+  --accent2:    #FF6080;
+  --white:      #FFFFFF;
+  --text:       #F0EAFF;
+  --text-mid:   #B8A8D8;
+  --text-muted: #6A5888;
+  --green:      #00D68F;
+  --green-soft: rgba(0,214,143,.12);
+  --red:        #FF4D6D;
+  --red-soft:   rgba(255,77,109,.12);
+  --amber:      #FFB830;
+  --amber-soft: rgba(255,184,48,.12);
+  --nav-w:      260px;
+  --r:          10px;
+  --r-lg:       16px;
+  --r-xl:       24px;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:Arial,'Helvetica Neue',Helvetica,sans-serif;
+  background:var(--deep);color:var(--text);
+  font-size:15px;line-height:1.65;overflow-x:hidden;
+}
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 80% 60% at 0% 0%, rgba(91,31,191,.35) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 50% at 100% 100%, rgba(224,64,96,.3) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 40% at 50% 50%, rgba(32,64,200,.2) 0%, transparent 70%);
+}
+
+.wave-bg{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.12;}
+.wave-bg canvas{width:100%;height:100%;display:block}
+
+/* ── SIDEBAR ──────────────────────────────── */
+.sidebar{
+  position:fixed;top:0;left:0;width:var(--nav-w);height:100vh;
+  background:rgba(8,5,16,.96);
+  backdrop-filter:blur(20px);
+  border-right:1px solid var(--border);
+  display:flex;flex-direction:column;z-index:100;overflow-y:auto;
+}
+.sidebar-logo{padding:1.5rem 1.25rem 1rem;border-bottom:1px solid var(--border);flex-shrink:0;}
+.logo-mark{display:flex;align-items:center;gap:10px;margin-bottom:.5rem}
+.logo-hex{
+  width:34px;height:34px;flex-shrink:0;
+  background:linear-gradient(135deg,var(--purple),var(--blue),var(--accent));
+  clip-path:polygon(25% 5%,75% 5%,100% 50%,75% 95%,25% 95%,0% 50%);
+  display:flex;align-items:center;justify-content:center;
+}
+.logo-title{font-size:13px;font-weight:700;color:var(--white);letter-spacing:-.2px;line-height:1.2;}
+.logo-sub{font-size:11px;color:var(--text-muted);margin-top:2px}
+.version-pill{
+  display:inline-block;
+  background:linear-gradient(90deg,rgba(91,31,191,.3),rgba(224,64,96,.2));
+  border:1px solid rgba(224,64,96,.35);
+  color:var(--accent2);font-size:10px;font-weight:700;
+  padding:2px 9px;border-radius:100px;letter-spacing:.5px;margin-top:.5rem;
+}
+nav{flex:1;padding:.75rem 0}
+.nav-section{
+  padding:.25rem 1.25rem .1rem;
+  font-size:9px;font-weight:700;color:var(--text-muted);
+  letter-spacing:1.5px;text-transform:uppercase;margin-top:.5rem;
+}
+.nav-item{
+  display:flex;align-items:center;gap:10px;
+  padding:.5rem 1.25rem;
+  font-size:12.5px;color:var(--text-muted);
+  cursor:pointer;border-left:2px solid transparent;
+  transition:all .15s;text-decoration:none;
+}
+.nav-item:hover{color:var(--accent2);background:rgba(224,64,96,.06);border-left-color:var(--accent)}
+.nav-item.active{
+  color:var(--white);
+  background:linear-gradient(90deg,rgba(91,31,191,.22),rgba(224,64,96,.1));
+  border-left-color:var(--accent);
+}
+.nav-num{
+  width:20px;height:20px;border-radius:5px;
+  background:rgba(255,255,255,.06);
+  display:flex;align-items:center;justify-content:center;
+  font-size:9px;font-weight:700;color:var(--text-muted);flex-shrink:0;
+}
+.nav-item.active .nav-num{
+  background:linear-gradient(135deg,var(--purple),var(--accent));color:#fff;
+}
+.sidebar-footer{padding:1rem 1.25rem;border-top:1px solid var(--border);flex-shrink:0;}
+.sidebar-footer span{font-size:11px;color:var(--text-muted);display:block;line-height:2}
+
+/* ── MAIN ─────────────────────────────────── */
+.main{margin-left:var(--nav-w);min-height:100vh;position:relative;z-index:1}
+
+/* ── HERO ─────────────────────────────────── */
+.hero{
+  position:relative;overflow:hidden;
+  padding:3.5rem 3rem 3rem;
+}
+.hero-canvas{position:absolute;inset:0;z-index:0;}
+.hero-inner{position:relative;z-index:1;max-width:860px}
+.hero-eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(200,56,138,.1);border:1px solid rgba(200,56,138,.3);
+  color:var(--accent2);font-size:11px;font-weight:700;
+  padding:4px 14px;border-radius:100px;
+  letter-spacing:.8px;text-transform:uppercase;margin-bottom:1.25rem;
+}
+.hero h1{
+  font-size:clamp(4rem,7vw,6.4rem);
+  font-weight:700;color:var(--white);
+  line-height:1.05;letter-spacing:-1.5px;margin-bottom:1rem;
+}
+.hero h1 .grad{
+  background:linear-gradient(90deg,var(--purple2),var(--accent));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.hero p{font-size:15px;color:var(--text-mid);max-width:580px;line-height:1.75;margin-bottom:2rem;}
+/* ── GLOBAL SCALE ─────────────────────────── */
+.global-scale-wrap{
+  width:100%;max-width:680px;
+  background:rgba(255,255,255,.04);
+  border:1px solid var(--border2);
+  border-radius:var(--r-xl);padding:1.5rem 1.75rem 1.25rem;
+  backdrop-filter:blur(12px);
+  margin-top:.5rem;
+}
+.scale-labels{
+  display:flex;justify-content:space-between;
+  font-size:10.5px;font-weight:700;color:var(--text-muted);
+  text-transform:uppercase;letter-spacing:.4px;
+  margin-bottom:.85rem;
+}
+.scale-label-right{color:var(--accent2)}
+.scale-track{
+  position:relative;height:10px;
+  background:rgba(255,255,255,.08);
+  border-radius:100px;cursor:pointer;
+  margin-bottom:.6rem;user-select:none;
+}
+.scale-fill{
+  position:absolute;left:0;top:0;height:100%;
+  border-radius:100px;
+  background:linear-gradient(90deg,var(--purple),var(--blue),var(--accent));
+  transition:width .08s;pointer-events:none;
+}
+.scale-handle{
+  position:absolute;top:50%;
+  width:22px;height:22px;border-radius:50%;
+  background:var(--white);
+  border:3px solid var(--accent);
+  box-shadow:0 0 0 4px rgba(224,64,96,.2),0 2px 8px rgba(0,0,0,.5);
+  transform:translate(-50%,-50%);
+  cursor:grab;
+  z-index:5;transition:box-shadow .15s;
+}
+.scale-handle:active{cursor:grabbing;box-shadow:0 0 0 8px rgba(224,64,96,.15),0 2px 12px rgba(0,0,0,.5)}
+.scale-handle:focus{outline:none;box-shadow:0 0 0 6px rgba(224,64,96,.25),0 2px 8px rgba(0,0,0,.5)}
+.scale-regions{position:absolute;top:18px;left:0;right:0;pointer-events:none}
+.scale-region-marker{
+  position:absolute;transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:3px;
+}
+.srm-dot{width:6px;height:6px;border-radius:50%;border:1px solid rgba(255,255,255,.2)}
+.srm-label{font-size:9px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.3px;white-space:nowrap}
+.scale-readout{
+  display:flex;align-items:center;gap:.75rem;margin-top:1.1rem;
+  border-top:1px solid var(--border);padding-top:.75rem;
+}
+.scale-pct{
+  font-size:1.8rem;font-weight:700;letter-spacing:-1px;line-height:1;
+  background:linear-gradient(90deg,var(--purple2),var(--accent));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  flex-shrink:0;
+}
+.scale-status{font-size:12.5px;color:var(--text-mid);line-height:1.5}
+/* ── DISCLAIMER ALERT ─────────────────────── */
+.alert-disclaimer{background:rgba(92,100,136,.1);border-color:var(--text-muted);color:var(--text-muted)}
+.alert-disclaimer strong{color:var(--text)}
+
+/* ── SECTION DIVIDER ──────────────────────── */
+.section-divider{
+  position:relative;overflow:hidden;
+  padding:2rem 3rem 1.75rem;
+  border-top:1px solid var(--border);
+}
+.section-divider::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(91,31,191,.18) 0%,rgba(32,64,200,.12) 50%,rgba(224,64,96,.1) 100%);
+  pointer-events:none;
+}
+.section-divider::after{
+  content:'';position:absolute;right:-80px;top:-80px;
+  width:300px;height:300px;border-radius:50%;
+  background:radial-gradient(circle,rgba(224,64,96,.1) 0%,transparent 70%);
+  pointer-events:none;
+}
+.section-divider>*{position:relative;z-index:1}
+.sec-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  background:linear-gradient(90deg,var(--purple),var(--accent));
+  color:#fff;font-size:10px;font-weight:700;
+  padding:3px 12px;border-radius:4px;margin-bottom:.5rem;
+  letter-spacing:.8px;text-transform:uppercase;
+}
+.section-divider h2{font-size:1.75rem;font-weight:700;color:var(--white);letter-spacing:-1px;line-height:1.15;margin-bottom:.35rem;}
+.section-divider p{font-size:13px;color:var(--text-muted);max-width:520px}
+
+/* ── CONTAINER ────────────────────────────── */
+.container{max-width:960px;padding:2.5rem 3rem}
+
+/* ── CARDS ────────────────────────────────── */
+.card{
+  background:rgba(255,255,255,.04);
+  border:1px solid var(--border);
+  border-radius:var(--r-lg);padding:1.5rem;
+  backdrop-filter:blur(10px);
+  transition:border-color .2s,background .2s;
+}
+.card:hover{border-color:var(--border2);background:rgba(255,255,255,.06)}
+.g2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem}
+.g3{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem}
+.g4{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:1rem}
+
+/* ── TAGS ─────────────────────────────────── */
+.tag{display:inline-block;font-size:11px;font-weight:700;padding:3px 10px;border-radius:100px;letter-spacing:.3px}
+.tag-cyan{background:rgba(224,64,96,.12);color:var(--accent2);border:1px solid rgba(224,64,96,.28)}
+.tag-purple{background:rgba(155,93,229,.2);color:var(--purple2);border:1px solid rgba(155,93,229,.3)}
+.tag-green{background:var(--green-soft);color:var(--green);border:1px solid rgba(0,214,143,.2)}
+.tag-red{background:var(--red-soft);color:var(--red);border:1px solid rgba(255,77,109,.2)}
+.tag-amber{background:var(--amber-soft);color:var(--amber);border:1px solid rgba(255,184,48,.2)}
+.tag-blue{background:rgba(26,110,255,.15);color:var(--blue2);border:1px solid rgba(58,159,255,.25)}
+
+/* ── ALERT ────────────────────────────────── */
+.alert{
+  display:flex;gap:12px;padding:1rem 1.25rem;
+  border-radius:var(--r);border-left:3px solid;
+  font-size:13.5px;margin-bottom:1rem;
+}
+.alert strong{display:block;margin-bottom:2px}
+.alert-cyan{background:rgba(200,56,138,.08);border-color:var(--accent);color:var(--accent2)}
+.alert-green{background:var(--green-soft);border-color:var(--green);color:var(--green)}
+.alert-amber{background:var(--amber-soft);border-color:var(--amber);color:var(--amber)}
+
+/* ── SEC HEADER ───────────────────────────── */
+.sec-header{
+  display:flex;align-items:flex-end;gap:.75rem;
+  margin-bottom:1.25rem;padding-bottom:.75rem;
+  border-bottom:1px solid var(--border);
+}
+.sec-title{font-size:1.05rem;font-weight:700;color:var(--white);letter-spacing:-.3px}
+.sec-sub{font-size:12.5px;color:var(--text-muted);margin-top:2px}
+
+/* ── SCROLL PROGRESS ──────────────────────── */
+.scroll-progress{
+  position:fixed;top:0;left:var(--nav-w);right:0;height:2px;
+  background:linear-gradient(90deg,var(--purple),var(--blue),var(--accent));
+  transform-origin:left;transform:scaleX(0);z-index:200;
+}
+.back-top{
+  position:fixed;bottom:2rem;right:2rem;
+  width:44px;height:44px;border-radius:50%;
+  background:linear-gradient(135deg,var(--purple),var(--blue));
+  color:#fff;border:1px solid rgba(224,64,96,.3);font-size:1.1rem;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  opacity:0;transform:translateY(10px);transition:all .2s;z-index:150;
+}
+.back-top.visible{opacity:1;transform:translateY(0)}
+.mobile-toggle{
+  display:none;position:fixed;top:1rem;left:1rem;z-index:200;
+  background:rgba(5,8,16,.9);backdrop-filter:blur(10px);
+  color:#fff;width:42px;height:42px;border-radius:9px;
+  border:1px solid var(--border2);font-size:1.1rem;cursor:pointer;
+  align-items:center;justify-content:center;
+}
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .45s ease,transform .45s ease}
+.reveal.in{opacity:1;transform:translateY(0)}
+
+/* ══════════════════════════════════════════════
+   COMPONENT 0 — OVERVIEW
+══════════════════════════════════════════════ */
+/* BIG KPI CARDS */
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1rem;margin-bottom:1.5rem}
+.kpi-card{
+  background:rgba(255,255,255,.04);border:1px solid var(--border);
+  border-radius:var(--r-xl);padding:1.5rem 1.25rem;text-align:center;
+  position:relative;overflow:hidden;transition:transform .2s,border-color .2s;
+}
+.kpi-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;}
+.kpi-card:hover{transform:translateY(-4px);border-color:rgba(224,64,96,.25)}
+.kpi-card.k-cyan::after{background:linear-gradient(90deg,var(--purple),var(--accent))}
+.kpi-card.k-green::after{background:linear-gradient(90deg,var(--green),var(--cyan))}
+.kpi-card.k-amber::after{background:var(--amber)}
+.kpi-card.k-purple::after{background:linear-gradient(90deg,var(--purple),var(--purple2))}
+.kpi-val{font-size:2.8rem;font-weight:700;letter-spacing:-2px;line-height:1;margin-bottom:.3rem;display:block}
+.kpi-lbl{font-weight:700;font-size:12px;color:var(--white);margin-bottom:.3rem}
+.kpi-note{font-size:11px;color:var(--text-muted);line-height:1.5}
+.kpi-card.k-cyan .kpi-val{background:linear-gradient(90deg,var(--accent2),var(--blue2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.kpi-card.k-green .kpi-val{background:linear-gradient(90deg,var(--green),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.kpi-card.k-amber .kpi-val{color:var(--amber)}
+.kpi-card.k-purple .kpi-val{background:linear-gradient(90deg,var(--purple2),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+
+/* REGION MAP CARDS */
+.region-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1rem;margin-bottom:1.5rem}
+.region-card{
+  border-radius:var(--r-xl);border:1px solid var(--border);
+  background:rgba(255,255,255,.03);overflow:hidden;
+  transition:transform .2s,border-color .2s;cursor:default;
+}
+.region-card:hover{transform:translateY(-3px);border-color:rgba(224,64,96,.2)}
+.region-header{
+  padding:1rem 1.25rem .75rem;
+  display:flex;align-items:center;gap:10px;
+  border-bottom:1px solid var(--border);
+}
+.region-flag{font-size:1.4rem}
+.region-name{font-weight:700;font-size:14px;color:var(--white)}
+.region-sub{font-size:11px;color:var(--text-muted);margin-top:1px}
+.region-body{padding:.9rem 1.25rem}
+.region-stats{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:.75rem}
+.rs-item .rs-val{font-size:1.5rem;font-weight:700;letter-spacing:-1px;line-height:1}
+.rs-item .rs-lbl{font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.3px}
+.phase-bar{
+  height:4px;border-radius:2px;margin-bottom:.6rem;
+  background:rgba(255,255,255,.08);overflow:hidden;
+}
+.phase-fill{height:100%;border-radius:2px;transition:width 1.2s cubic-bezier(.4,0,.2,1)}
+.phase-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px}
+
+/* STATUS LEGEND */
+.status-legend{display:flex;gap:.75rem;flex-wrap:wrap;margin-bottom:1.5rem}
+.sl-item{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text-mid)}
+.sl-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+
+/* ══════════════════════════════════════════════
+   COMPONENT 1 — TIMELINE / ROADMAP
+══════════════════════════════════════════════ */
+.roadmap-tabs{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:1.5rem}
+.rm-tab{
+  padding:7px 16px;border-radius:8px;
+  border:1px solid var(--border);
+  background:rgba(255,255,255,.03);color:var(--text-muted);
+  font-size:12.5px;font-weight:700;cursor:pointer;transition:all .15s;
+}
+.rm-tab:hover{border-color:var(--accent);color:var(--accent2);background:rgba(224,64,96,.07)}
+.rm-tab.active{
+  background:linear-gradient(90deg,rgba(91,31,191,.45),rgba(224,64,96,.3));
+  border-color:var(--accent);color:var(--white);
+}
+.rm-panel{display:none}.rm-panel.active{display:block}
+
+/* TIMELINE */
+.timeline{position:relative;padding-left:2rem;margin-bottom:1.5rem}
+.timeline::before{
+  content:'';position:absolute;left:7px;top:4px;bottom:4px;width:1px;
+  background:linear-gradient(180deg,var(--purple),var(--blue),var(--accent),transparent);
+}
+.tl-item{position:relative;margin-bottom:1.5rem}
+.tl-dot{
+  position:absolute;left:-2rem;top:3px;
+  width:15px;height:15px;border-radius:50%;
+  border:2px solid;flex-shrink:0;
+  background:var(--deep);
+  display:flex;align-items:center;justify-content:center;
+}
+.tl-dot-inner{width:5px;height:5px;border-radius:50%}
+.tl-item.phase-0 .tl-dot{border-color:var(--purple);} .tl-item.phase-0 .tl-dot-inner{background:var(--purple)}
+.tl-item.phase-1 .tl-dot{border-color:var(--blue2);} .tl-item.phase-1 .tl-dot-inner{background:var(--blue2)}
+.tl-item.phase-2 .tl-dot{border-color:var(--accent);} .tl-item.phase-2 .tl-dot-inner{background:var(--accent)}
+.tl-item.phase-3 .tl-dot{border-color:var(--green);} .tl-item.phase-3 .tl-dot-inner{background:var(--green)}
+.tl-header{display:flex;align-items:center;gap:.6rem;margin-bottom:.4rem;flex-wrap:wrap}
+.tl-week{font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px}
+.tl-title{font-weight:700;font-size:14px;color:var(--white)}
+.tl-body{font-size:13px;color:var(--text-mid);line-height:1.65}
+.tl-actions{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.6rem}
+.tl-chip{
+  font-size:11px;padding:2px 9px;border-radius:6px;
+  background:rgba(255,255,255,.07);color:var(--text-mid);
+  border:1px solid var(--border2);
+}
+
+/* STAKEHOLDER TABLE */
+.stake-table{width:100%;border-collapse:collapse;font-size:13px;margin-bottom:1.5rem}
+.stake-table th{
+  text-align:left;padding:9px 12px;
+  background:rgba(107,53,200,.3);color:var(--cyan);
+  font-weight:700;font-size:10.5px;text-transform:uppercase;letter-spacing:.4px;
+}
+.stake-table td{
+  padding:9px 12px;border-bottom:1px solid var(--border);
+  color:var(--text-mid);vertical-align:top;
+}
+.stake-table tr:last-child td{border-bottom:none}
+.stake-table tr:hover td{background:rgba(224,64,96,.04);color:var(--text)}
+.stake-table strong{color:var(--white)}
+
+/* ══════════════════════════════════════════════
+   COMPONENT 2 — KPI TRACKER
+══════════════════════════════════════════════ */
+.kpi-tabs{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:1.25rem}
+.kpi-tab{
+  padding:6px 14px;border-radius:8px;border:1px solid var(--border);
+  background:rgba(255,255,255,.03);color:var(--text-muted);
+  font-size:12px;font-weight:700;cursor:pointer;transition:all .15s;
+}
+.kpi-tab:hover{border-color:var(--accent);color:var(--accent2)}
+.kpi-tab.active{background:linear-gradient(90deg,rgba(91,31,191,.45),rgba(224,64,96,.3));border-color:var(--accent);color:#fff}
+.kpi-panel{display:none}.kpi-panel.active{display:block}
+
+/* METRIC ROWS */
+.metric-row{
+  display:flex;align-items:center;gap:1rem;
+  padding:1rem 1.25rem;border-radius:var(--r-lg);
+  border:1px solid var(--border);background:rgba(255,255,255,.02);
+  margin-bottom:.6rem;transition:all .15s;
+}
+.metric-row:hover{border-color:var(--border2);background:rgba(224,64,96,.04)}
+.metric-icon{font-size:1.5rem;flex-shrink:0;width:36px;text-align:center}
+.metric-info{flex:1;min-width:0}
+.metric-name{font-weight:700;font-size:14px;color:var(--white);margin-bottom:2px}
+.metric-desc{font-size:12px;color:var(--text-muted);line-height:1.5}
+.metric-right{text-align:right;flex-shrink:0}
+.metric-target{font-size:13px;font-weight:700;color:var(--accent2);margin-bottom:3px}
+.metric-freq{font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.3px}
+.metric-track{
+  width:90px;height:5px;border-radius:3px;
+  background:rgba(255,255,255,.08);overflow:hidden;margin-top:6px;margin-left:auto;
+}
+.metric-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--purple),var(--accent))}
+
+/* ══════════════════════════════════════════════
+   COMPONENT 3 — RAG MILESTONES
+══════════════════════════════════════════════ */
+.filter-row{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:1.25rem}
+.filter-btn{
+  padding:5px 14px;border-radius:8px;border:1px solid var(--border);
+  background:rgba(255,255,255,.03);color:var(--text-muted);
+  font-size:12px;font-weight:700;cursor:pointer;transition:all .15s;
+}
+.filter-btn:hover{border-color:var(--border2);color:var(--text)}
+.filter-btn.active{border-color:var(--accent);background:rgba(224,64,96,.1);color:var(--accent2)}
+
+.rag-item{
+  border-radius:var(--r-lg);border:1px solid var(--border);
+  background:rgba(255,255,255,.02);
+  margin-bottom:.6rem;overflow:hidden;
+  transition:all .2s;
+}
+.rag-item:hover{border-color:var(--border2)}
+.rag-item[data-status="Green"]{border-left:3px solid var(--green)}
+.rag-item[data-status="Amber"]{border-left:3px solid var(--amber)}
+.rag-item[data-status="Red"]{border-left:3px solid var(--red)}
+.rag-main{display:grid;grid-template-columns:1fr auto auto;gap:1rem;align-items:center;padding:.9rem 1.1rem}
+.rag-name{font-weight:700;font-size:13.5px;color:var(--white)}
+.rag-region{font-size:11px;color:var(--text-muted);margin-top:2px}
+.rag-date{font-size:12px;color:var(--text-muted);white-space:nowrap}
+.rag-status{
+  width:64px;text-align:center;
+  font-size:11px;font-weight:700;padding:3px 8px;
+  border-radius:6px;
+}
+.rag-status.Green{background:rgba(0,214,143,.15);color:var(--green);border:1px solid rgba(0,214,143,.3)}
+.rag-status.Amber{background:var(--amber-soft);color:var(--amber);border:1px solid rgba(255,184,48,.3)}
+.rag-status.Red{background:var(--red-soft);color:var(--red);border:1px solid rgba(255,77,109,.3)}
+.rag-note{font-size:12px;color:var(--text-muted);padding:.5rem 1.1rem .75rem;border-top:1px solid var(--border)}
+
+/* ══════════════════════════════════════════════
+   COMPONENT 4 — SCALABILITY
+══════════════════════════════════════════════ */
+.phase-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;margin-bottom:1.5rem}
+.phase-card{
+  border-radius:var(--r-xl);padding:1.75rem 1.5rem;
+  border:1px solid var(--border2);
+  position:relative;overflow:hidden;
+  transition:transform .25s,border-color .25s;
+}
+.phase-card:hover{transform:translateY(-4px);border-color:rgba(224,64,96,.28)}
+.phase-card::before{content:'';position:absolute;inset:0;opacity:.85}
+.pc-1::before{background:linear-gradient(145deg,rgba(91,31,191,.9),rgba(30,15,60,.95))}
+.pc-2::before{background:linear-gradient(145deg,rgba(32,64,200,.85),rgba(15,20,50,.95))}
+.pc-3::before{background:linear-gradient(145deg,rgba(200,40,80,.8),rgba(40,10,20,.95))}
+.phase-card>*{position:relative;z-index:1}
+.pc-label{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.45);margin-bottom:.4rem}
+.pc-phase{font-size:1.4rem;font-weight:700;color:#fff;margin-bottom:.2rem}
+.pc-hrs{font-size:2rem;font-weight:700;color:var(--accent2);letter-spacing:-1px;margin-bottom:.3rem;display:block}
+.pc-bar{width:36px;height:2px;border-radius:2px;background:var(--cyan);margin:.6rem 0}
+.pc-items{list-style:none}
+.pc-items li{font-size:12px;color:rgba(255,255,255,.7);padding:3px 0;padding-left:1.1rem;position:relative}
+.pc-items li::before{content:'→';position:absolute;left:0;color:var(--accent2);font-size:10px;top:4px}
+
+/* SCALE VS EVOLVE TABLE */
+.sev-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem}
+.sev-col{border-radius:var(--r-lg);overflow:hidden;border:1px solid var(--border)}
+.sev-header{
+  padding:.85rem 1.1rem;display:flex;align-items:center;gap:8px;
+  font-weight:700;font-size:13px;color:#fff;
+}
+.sev-body{padding:.75rem 1.1rem;background:rgba(255,255,255,.02)}
+.sev-item{
+  display:flex;align-items:flex-start;gap:8px;
+  padding:.6rem 0;border-bottom:1px solid var(--border);
+  font-size:13px;color:var(--text-mid);
+}
+.sev-item:last-child{border-bottom:none;padding-bottom:0}
+.sev-icon{flex-shrink:0;margin-top:1px}
+
+/* GOVERNANCE MATRIX */
+.gov-table{width:100%;border-collapse:collapse;font-size:13px;margin-bottom:1.5rem}
+.gov-table th{
+  text-align:left;padding:9px 12px;
+  background:rgba(107,53,200,.3);color:var(--cyan);
+  font-weight:700;font-size:10.5px;text-transform:uppercase;letter-spacing:.4px;
+}
+.gov-table td{padding:9px 12px;border-bottom:1px solid var(--border);color:var(--text-mid);vertical-align:top}
+.gov-table tr:last-child td{border-bottom:none}
+.gov-table tr:hover td{background:rgba(224,64,96,.04);color:var(--text)}
+.owner-global{color:var(--accent2);font-weight:700}
+.owner-regional{color:var(--blue2);font-weight:700}
+
+/* ══════════════════════════════════════════════
+   COMPONENT 5 — ENGAGEMENT / GAMIFICATION
+══════════════════════════════════════════════ */
+.level-track{
+  display:flex;gap:0;margin-bottom:1.5rem;
+  border-radius:var(--r-xl);overflow:hidden;border:1px solid var(--border);
+}
+.level-item{
+  flex:1;padding:1.25rem .75rem;text-align:center;
+  border-right:1px solid var(--border);
+  transition:background .2s;cursor:default;
+}
+.level-item:last-child{border-right:none}
+.level-item:hover{background:rgba(255,255,255,.04)}
+.level-badge{font-size:1.5rem;margin-bottom:.4rem}
+.level-name{font-size:12px;font-weight:700;margin-bottom:3px}
+.level-pts{font-size:11px;color:var(--text-muted)}
+.level-item.lv-bronze .level-name{color:#CD7F32}
+.level-item.lv-silver .level-name{color:#C0C0C0}
+.level-item.lv-gold .level-name{color:#FFD700}
+.level-item.lv-diamond .level-name{color:var(--accent2)}
+
+.mission-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:.75rem;margin-bottom:1.5rem}
+.mission-card{
+  border-radius:var(--r-lg);border:1px solid var(--border);
+  background:rgba(255,255,255,.03);padding:1rem 1.1rem;
+  transition:all .2s;
+}
+.mission-card:hover{border-color:rgba(224,64,96,.25);background:rgba(224,64,96,.05)}
+.mission-icon{font-size:1.4rem;margin-bottom:.5rem}
+.mission-name{font-weight:700;font-size:13.5px;color:var(--white);margin-bottom:3px}
+.mission-desc{font-size:12px;color:var(--text-muted);line-height:1.5;margin-bottom:.5rem}
+.mission-pts{
+  display:inline-block;font-size:11px;font-weight:700;
+  background:rgba(224,64,96,.12);color:var(--accent2);
+  border:1px solid rgba(224,64,96,.25);
+  padding:2px 9px;border-radius:100px;
+}
+
+/* CONTENT FLOW */
+.flow-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-bottom:1.5rem;border-radius:var(--r-xl);overflow:hidden;border:1px solid var(--border)}
+.flow-step{padding:1.25rem 1rem;text-align:center;border-right:1px solid var(--border);position:relative;transition:background .2s}
+.flow-step:last-child{border-right:none}
+.flow-step:hover{background:rgba(255,255,255,.03)}
+.flow-arrow{position:absolute;right:-10px;top:50%;transform:translateY(-50%);z-index:2;color:var(--cyan);font-size:12px;font-weight:700}
+.flow-step:last-child .flow-arrow{display:none}
+.flow-num{
+  width:28px;height:28px;border-radius:50%;margin:0 auto .6rem;
+  background:linear-gradient(135deg,var(--purple),var(--accent));
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:700;color:#fff;
+}
+.flow-title{font-weight:700;font-size:13px;color:var(--white);margin-bottom:3px}
+.flow-note{font-size:11px;color:var(--text-muted);line-height:1.5}
+
+/* ── RESPONSIVE ───────────────────────────── */
+@media(max-width:900px){
+  :root{--nav-w:0}
+  .sidebar{transform:translateX(-260px);width:260px}
+  .sidebar.open{transform:translateX(0)}
+  .main{margin-left:0}
+  .hero{padding:2rem 1.5rem}
+  .container{padding:1.5rem}
+  .sev-grid{grid-template-columns:1fr}
+  .flow-steps{grid-template-columns:1fr 1fr}
+  .level-track{flex-wrap:wrap}
+  .rag-main{grid-template-columns:1fr auto}
+  .rag-status{grid-row:2}
+  .mobile-toggle{display:flex}
+  .scroll-progress{left:0}
+}
+</style>
+</head>
+<body>
+
+<div class="wave-bg" aria-hidden="true"><canvas id="waveCanvas"></canvas></div>
+<div class="scroll-progress" id="scrollProg"></div>
+<button class="mobile-toggle" id="menuToggle" aria-label="Menu">☰</button>
+<button class="back-top" id="backTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-mark">
+      <div class="logo-hex"></div>
+      <div>
+        <div class="logo-title">cognizant</div>
+        <div class="logo-sub">Community Ambassadors</div>
+      </div>
+    </div>
+    <div style="font-size:10px;color:var(--text-muted);font-style:italic;margin-bottom:4px">intuition engineered</div>
+    <span class="version-pill">Global Expansion · 2025–2027</span>
+  </div>
+  <nav>
+    <div class="nav-section">Dashboard</div>
+    <a class="nav-item active" href="#overview" data-section="overview">
+      <span class="nav-num">00</span>Program Overview
+    </a>
+    <a class="nav-item" href="#roadmap" data-section="roadmap">
+      <span class="nav-num">01</span>Expansion Roadmap
+    </a>
+    <a class="nav-item" href="#kpis" data-section="kpis">
+      <span class="nav-num">02</span>KPI Tracker
+    </a>
+    <a class="nav-item" href="#milestones" data-section="milestones">
+      <span class="nav-num">03</span>Milestones &amp; RAG
+    </a>
+    <a class="nav-item" href="#strategy" data-section="strategy">
+      <span class="nav-num">04</span>Global Strategy
+    </a>
+    <a class="nav-item" href="#engagement" data-section="engagement">
+      <span class="nav-num">05</span>Engagement Model
+    </a>
+  </nav>
+  <div class="sidebar-footer">
+    <span>Life at Cognizant · EB&amp;M Team</span>
+    <span>For VP Global Marketing use</span>
+    <span style="color:var(--amber);font-size:10px;font-weight:700;letter-spacing:.3px">CONFIDENTIAL</span>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+
+<!-- ══ SECTION 0 — OVERVIEW ══════════════════ -->
+<section id="overview">
+<div class="hero">
+  <canvas class="hero-canvas" id="heroCanvas" aria-hidden="true"></canvas>
+  <div class="hero-inner">
+    <div class="hero-eyebrow">🌎 Global Expansion Dashboard · Life at Cognizant Networks</div>
+    <h1>Life at Cognizant Networks<br/><span class="grad">Global Scale</span></h1>
+    <p>Real-time visibility into the Ambassadors and Content Creators networks connection and expansion through LATAM, Canada, India, and beyond.</p>
+
+    <div class="global-scale-wrap">
+      <div class="scale-labels">
+        <span class="scale-label-left">🏠 National &amp; Regional Approach</span>
+        <span class="scale-label-right">Global Approach 🌐</span>
+      </div>
+      <div class="scale-track" id="scaleTrack">
+        <div class="scale-fill" id="scaleFill" style="width:18%"></div>
+        <div class="scale-handle" id="scaleHandle" tabindex="0" role="slider" aria-valuemin="0" aria-valuemax="100" aria-valuenow="18" aria-label="Global maturity scale" style="left:18%"></div>
+        <div class="scale-regions">
+          <div class="scale-region-marker" style="left:4%"><div class="srm-dot" style="background:var(--green)"></div><div class="srm-label">Brazil</div></div>
+          <div class="scale-region-marker" style="left:25%"><div class="srm-dot" style="background:var(--amber)"></div><div class="srm-label">LATAM</div></div>
+          <div class="scale-region-marker" style="left:42%"><div class="srm-dot" style="background:var(--blue2)"></div><div class="srm-label">Canada</div></div>
+          <div class="scale-region-marker" style="left:62%"><div class="srm-dot" style="background:var(--purple2)"></div><div class="srm-label">India</div></div>
+          <div class="scale-region-marker" style="left:85%"><div class="srm-dot" style="background:var(--text-muted)"></div><div class="srm-label">EU &amp; UK</div></div>
+        </div>
+      </div>
+      <div class="scale-readout">
+        <span class="scale-pct" id="scalePct">18%</span>
+        <span class="scale-status" id="scaleStatus">Early Expansion — LATAM activation in progress</span>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container">
+
+  <div class="alert alert-disclaimer reveal">
+    <div>🔒</div>
+    <div><strong>Governance &amp; Ownership</strong> Material updated and managed by the Global EB&amp;M and Life at Cognizant teams. For internal executive use only — not for external distribution.</div>
+  </div>
+
+  <!-- KEY METRICS -->
+  <div class="sec-header reveal">
+    <div><div class="sec-title">Program at a Glance</div><div class="sec-sub">Brazil baseline · 30-day results</div></div>
+  </div>
+  <div class="kpi-grid">
+    <div class="kpi-card k-cyan reveal"><span class="kpi-val">82</span><div class="kpi-lbl">Active Ambassadors</div><div class="kpi-note">Brazil · 30-day pilot</div></div>
+    <div class="kpi-card k-green reveal"><span class="kpi-val">100%</span><div class="kpi-lbl">Satisfaction Rate</div><div class="kpi-note">Retention intent: indefinite</div></div>
+    <div class="kpi-card k-amber reveal"><span class="kpi-val">+789</span><div class="kpi-lbl">Post Reactions</div><div class="kpi-note">116 comments on ambassador posts</div></div>
+    <div class="kpi-card k-purple reveal"><span class="kpi-val">+890</span><div class="kpi-lbl">Organic Engagements</div><div class="kpi-note">Total across all ambassador content</div></div>
+    <div class="kpi-card k-cyan reveal"><span class="kpi-val">10h+</span><div class="kpi-lbl">Training Delivered</div><div class="kpi-note">6 onboarding sessions</div></div>
+    <div class="kpi-card k-green reveal"><span class="kpi-val">6</span><div class="kpi-lbl">Personas Active</div><div class="kpi-note">Recruiter · Technical · Manager · Early Talent · ERG · Influencer</div></div>
+  </div>
+
+  <!-- REGION STATUS -->
+  <div class="sec-header reveal">
+    <div><div class="sec-title">Regional Expansion Status</div><div class="sec-sub">Current phase per region</div></div>
+  </div>
+  <div class="status-legend reveal">
+    <div class="sl-item"><div class="sl-dot" style="background:var(--green)"></div>Active / Maturing</div>
+    <div class="sl-item"><div class="sl-dot" style="background:var(--amber)"></div>Pre-Launch / In Progress</div>
+    <div class="sl-item"><div class="sl-dot" style="background:var(--blue2)"></div>Integration</div>
+    <div class="sl-item"><div class="sl-dot" style="background:var(--text-muted)"></div>On Horizon</div>
+  </div>
+  <div class="region-grid">
+    <div class="region-card reveal">
+      <div class="region-header">
+        <div class="region-flag">🇧🇷</div>
+        <div><div class="region-name">Brazil</div><div class="region-sub">Pilot Region · Reference Model</div></div>
+        <span class="tag tag-green" style="margin-left:auto">Maturing</span>
+      </div>
+      <div class="region-body">
+        <div class="region-stats">
+          <div class="rs-item"><div class="rs-val" style="color:var(--green)">82</div><div class="rs-lbl">Active</div></div>
+          <div class="rs-item"><div class="rs-val" style="color:var(--cyan)">100%</div><div class="rs-lbl">NPS</div></div>
+        </div>
+        <div class="phase-bar"><div class="phase-fill" style="width:85%;background:linear-gradient(90deg,var(--green),var(--cyan))"></div></div>
+        <div class="phase-label" style="color:var(--green)">● Maturing → Scaling</div>
+      </div>
+    </div>
+    <div class="region-card reveal">
+      <div class="region-header">
+        <div class="region-flag">🇦🇷🇲🇽🇨🇷</div>
+        <div><div class="region-name">LATAM</div><div class="region-sub">Argentina · Mexico · Costa Rica</div></div>
+        <span class="tag tag-amber" style="margin-left:auto">Pre-Launch</span>
+      </div>
+      <div class="region-body">
+        <div class="region-stats">
+          <div class="rs-item"><div class="rs-val" style="color:var(--amber)">10+</div><div class="rs-lbl">Pipeline</div></div>
+          <div class="rs-item"><div class="rs-val" style="color:var(--amber)">W1</div><div class="rs-lbl">Phase</div></div>
+        </div>
+        <div class="phase-bar"><div class="phase-fill" style="width:20%;background:linear-gradient(90deg,var(--amber),var(--blue2))"></div></div>
+        <div class="phase-label" style="color:var(--amber)">● Alignment Phase · 0–6 months</div>
+      </div>
+    </div>
+    <div class="region-card reveal">
+      <div class="region-header">
+        <div class="region-flag">🇨🇦</div>
+        <div><div class="region-name">Canada</div><div class="region-sub">Content Creators Network</div></div>
+        <span class="tag tag-blue" style="margin-left:auto">Integration</span>
+      </div>
+      <div class="region-body">
+        <div class="region-stats">
+          <div class="rs-item"><div class="rs-val" style="color:var(--blue2)">TBD</div><div class="rs-lbl">Creators</div></div>
+          <div class="rs-item"><div class="rs-val" style="color:var(--blue2)">M2</div><div class="rs-lbl">Joint Session</div></div>
+        </div>
+        <div class="phase-bar"><div class="phase-fill" style="width:15%;background:linear-gradient(90deg,var(--blue),var(--cyan))"></div></div>
+        <div class="phase-label" style="color:var(--blue2)">● Co-creation model · Month 2</div>
+      </div>
+    </div>
+    <div class="region-card reveal">
+      <div class="region-header">
+        <div class="region-flag">🇮🇳</div>
+        <div><div class="region-name">India · Bangalore</div><div class="region-sub">Medium-term launch</div></div>
+        <span class="tag tag-purple" style="margin-left:auto">Planned</span>
+      </div>
+      <div class="region-body">
+        <div class="region-stats">
+          <div class="rs-item"><div class="rs-val" style="color:var(--purple2)">20-30</div><div class="rs-lbl">Target Cohort</div></div>
+          <div class="rs-item"><div class="rs-val" style="color:var(--purple2)">M7</div><div class="rs-lbl">Launch</div></div>
+        </div>
+        <div class="phase-bar"><div class="phase-fill" style="width:5%;background:linear-gradient(90deg,var(--purple),var(--purple2))"></div></div>
+        <div class="phase-label" style="color:var(--purple2)">● Planned · 6–18 months</div>
+      </div>
+    </div>
+    <div class="region-card reveal">
+      <div class="region-header">
+        <div class="region-flag">🇷🇴🇬🇧🇪🇸</div>
+        <div><div class="region-name">Romania · UK&amp;I · Spain/PT</div><div class="region-sub">On the horizon</div></div>
+        <span class="tag" style="background:rgba(92,100,136,.2);color:var(--text-muted);border:1px solid rgba(92,100,136,.3);margin-left:auto">Horizon</span>
+      </div>
+      <div class="region-body">
+        <div class="region-stats">
+          <div class="rs-item"><div class="rs-val" style="color:var(--text-muted)">—</div><div class="rs-lbl">Pipeline</div></div>
+          <div class="rs-item"><div class="rs-val" style="color:var(--text-muted)">18m+</div><div class="rs-lbl">Horizon</div></div>
+        </div>
+        <div class="phase-bar"><div class="phase-fill" style="width:2%;background:var(--text-muted)"></div></div>
+        <div class="phase-label" style="color:var(--text-muted)">● Go/No-Go at Month 18</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</section>
+
+<!-- ══ SECTION 1 — ROADMAP ════════════════════ -->
+<section id="roadmap" class="content-section">
+<div class="section-divider">
+  <div class="sec-badge">01</div>
+  <h2>Expansion Roadmap</h2>
+  <p>Phase-by-phase activation plans for LATAM, Canada, and India</p>
+</div>
+<div class="container">
+  <div class="roadmap-tabs" id="rmTabs">
+    <button class="rm-tab active" data-panel="rm-latam">🇦🇷🇲🇽🇨🇷 LATAM</button>
+    <button class="rm-tab" data-panel="rm-canada">🇨🇦 Canada</button>
+    <button class="rm-tab" data-panel="rm-india">🇮🇳 India · Bangalore</button>
+    <button class="rm-tab" data-panel="rm-stakeholders">👥 Stakeholders</button>
+  </div>
+
+  <!-- LATAM PANEL -->
+  <div class="rm-panel active" id="rm-latam">
+    <div class="alert alert-amber reveal">
+      <div>⚡</div>
+      <div><strong>LATAM Activation — Now → 6 Months</strong> 10+ ambassadors pre-identified. Scalable governance model adapting Brazil's quality without requiring full EB Specialist dedication per country.</div>
+    </div>
+    <div class="timeline reveal">
+      <div class="tl-item phase-0">
+        <div class="tl-dot"><div class="tl-dot-inner"></div></div>
+        <div class="tl-header">
+          <span class="tl-week">Weeks 1–3</span>
+          <span class="tag tag-purple">Phase 0</span>
+        </div>
+        <div class="tl-title">Stakeholder Alignment</div>
+        <div class="tl-body">Secure Country Manager sign-off in Argentina, Mexico, and Costa Rica. Align HR Americas on program scope. Confirm EB Specialist bandwidth allocation. Begin Spanish toolkit translation.</div>
+        <div class="tl-actions">
+          <span class="tl-chip">Country Manager approval</span>
+          <span class="tl-chip">HR Americas briefing</span>
+          <span class="tl-chip">EB Specialist: 20 hrs/wk</span>
+          <span class="tl-chip">Spanish toolkit v1</span>
+        </div>
+      </div>
+      <div class="tl-item phase-1">
+        <div class="tl-dot"><div class="tl-dot-inner"></div></div>
+        <div class="tl-header">
+          <span class="tl-week">Weeks 4–8</span>
+          <span class="tag tag-blue">Phase 1</span>
+        </div>
+        <div class="tl-title">Onboarding Cohort</div>
+        <div class="tl-body">Confirm ambassador nominees from pre-identified pipeline. Joint virtual onboarding session (bilingual). Personas defined per country. Gamification engine activated — AP system live.</div>
+        <div class="tl-actions">
+          <span class="tl-chip">Pipeline confirmed: 10+ per country</span>
+          <span class="tl-chip">Kick-off sessions: AR · MX · CR</span>
+          <span class="tl-chip">AP system activated</span>
+          <span class="tl-chip">Buddy pairs assigned</span>
+        </div>
+      </div>
+      <div class="tl-item phase-2">
+        <div class="tl-dot"><div class="tl-dot-inner"></div></div>
+        <div class="tl-header">
+          <span class="tl-week">Weeks 9–18</span>
+          <span class="tag tag-cyan">Phase 2</span>
+        </div>
+        <div class="tl-title">Content Activation</div>
+        <div class="tl-body">First content wave published. Americas editorial calendar launched. Buddy system active. Monthly operating cadence established. Canada joint session scheduled (Month 2).</div>
+        <div class="tl-actions">
+          <span class="tl-chip">First posts published</span>
+          <span class="tl-chip">Editorial calendar: Americas</span>
+          <span class="tl-chip">Canada joint session (M2)</span>
+          <span class="tl-chip">UTM tracking live</span>
+        </div>
+      </div>
+      <div class="tl-item phase-3">
+        <div class="tl-dot"><div class="tl-dot-inner"></div></div>
+        <div class="tl-header">
+          <span class="tl-week">Weeks 19–26</span>
+          <span class="tag tag-green">Phase 3</span>
+        </div>
+        <div class="tl-title">Stabilization & Review</div>
+        <div class="tl-body">30-day NPS checkpoint. KPI review vs. Brazil benchmarks. Regional Ambassador Leads identified. Phase transition assessment — evaluate readiness for EB Specialist coaching model.</div>
+        <div class="tl-actions">
+          <span class="tl-chip">NPS survey: all ambassadors</span>
+          <span class="tl-chip">Ambassador Lead election</span>
+          <span class="tl-chip">Phase 2→3 transition assessment</span>
+          <span class="tl-chip">Playbook LATAM annex</span>
+        </div>
+      </div>
+    </div>
+    <div class="sec-header reveal"><div><div class="sec-title">LATAM Localization Guide</div><div class="sec-sub">Content tone, EVP emphasis, and LinkedIn behavior by country</div></div></div>
+    <div class="g3 reveal" style="margin-bottom:1.5rem">
+      <div class="card">
+        <div style="font-size:1.5rem;margin-bottom:.5rem">🇦🇷</div>
+        <div style="font-weight:700;font-size:14px;color:var(--white);margin-bottom:5px">Argentina</div>
+        <div style="font-size:12px;color:var(--text-muted);line-height:1.65">EVP: career growth, technical excellence, stability. LinkedIn tone: professional, analytical. Avoid overly casual content.</div>
+      </div>
+      <div class="card">
+        <div style="font-size:1.5rem;margin-bottom:.5rem">🇲🇽</div>
+        <div style="font-weight:700;font-size:14px;color:var(--white);margin-bottom:5px">Mexico</div>
+        <div style="font-size:12px;color:var(--text-muted);line-height:1.65">EVP: innovation, team culture, growth. LinkedIn: higher engagement with multimedia. Video and carousels perform best.</div>
+      </div>
+      <div class="card">
+        <div style="font-size:1.5rem;margin-bottom:.5rem">🇨🇷</div>
+        <div style="font-weight:700;font-size:14px;color:var(--white);margin-bottom:5px">Costa Rica</div>
+        <div style="font-size:12px;color:var(--text-muted);line-height:1.65">EVP: work-life balance, global exposure, English proficiency. Bilingual EN/ES content performs well on LinkedIn.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CANADA PANEL -->
+  <div class="rm-panel" id="rm-canada">
+    <div class="alert alert-cyan reveal">
+      <div>🤝</div>
+      <div><strong>Canada — Content Creators Integration</strong> Connection model between Brazil ambassadors and Canada's young Content Creators. Not a merger — a cross-pollination model.</div>
+    </div>
+    <div class="g2 reveal" style="margin-bottom:1.5rem">
+      <div class="card"><div style="font-size:1.3rem;margin-bottom:.5rem">📅</div><div style="font-weight:700;font-size:14px;color:var(--white);margin-bottom:5px">Month 2 — Joint Session</div><div style="font-size:12.5px;color:var(--text-muted);line-height:1.65">90-minute virtual session. Brazil ambassadors + Canada Content Creators. Share experiences, exchange ideas, co-creation brief. Bilingual facilitation (EN/PT-BR).</div></div>
+      <div class="card"><div style="font-size:1.3rem;margin-bottom:.5rem">🔄</div><div style="font-weight:700;font-size:14px;color:var(--white);margin-bottom:5px">Quarterly Co-Creation</div><div style="font-size:12.5px;color:var(--text-muted);line-height:1.65">Shared theme brief each quarter (e.g. "A Day in My Life"). Both teams produce regional versions, published simultaneously with cross-tagging.</div></div>
+      <div class="card"><div style="font-size:1.3rem;margin-bottom:.5rem">🔁</div><div style="font-weight:700;font-size:14px;color:var(--white);margin-bottom:5px">Bi-Annual Content Swaps</div><div style="font-size:12.5px;color:var(--text-muted);line-height:1.65">One Brazil post amplified on Canada channels. One Canada post amplified in Brazil community. Curated by EB Specialist.</div></div>
+      <div class="card"><div style="font-size:1.3rem;margin-bottom:.5rem">🎯</div><div style="font-weight:700;font-size:14px;color:var(--white);margin-bottom:5px">Joint Campaigns</div><div style="font-size:12.5px;color:var(--text-muted);line-height:1.65">International Youth Day, World Careers Week: coordinated multi-region content with shared hashtag. Maximum impact, minimal overhead.</div></div>
+    </div>
+    <div class="alert alert-green reveal">
+      <div>💡</div>
+      <div><strong>Investment level</strong> 2–4 facilitated touchpoints per year. No structural change to either program. High-value cross-regional content at minimal incremental cost.</div>
+    </div>
+  </div>
+
+  <!-- INDIA PANEL -->
+  <div class="rm-panel" id="rm-india">
+    <div class="alert alert-cyan reveal">
+      <div>🇮🇳</div>
+      <div><strong>India (Bangalore) — Months 6–18</strong> Largest talent market. Must be engineered for scale from day one. Dedicated EB Specialist on the ground is the critical path item.</div>
+    </div>
+    <div class="timeline reveal">
+      <div class="tl-item phase-0">
+        <div class="tl-dot"><div class="tl-dot-inner"></div></div>
+        <div class="tl-header"><span class="tl-week">Months 1–3 (Pre-launch)</span><span class="tag tag-purple">Pre-Launch</span></div>
+        <div class="tl-title">Stakeholder Alignment + EB Specialist Hire</div>
+        <div class="tl-body">India HR Leadership, local Bangalore leadership, IOA, CPO Recruitment aligned. EB Specialist Bangalore hired or assigned — critical path: cannot launch without this role confirmed.</div>
+        <div class="tl-actions">
+          <span class="tl-chip">India HR sign-off</span><span class="tl-chip">EB Specialist Bangalore confirmed</span><span class="tl-chip">EVP localization complete</span>
+        </div>
+      </div>
+      <div class="tl-item phase-1">
+        <div class="tl-dot"><div class="tl-dot-inner"></div></div>
+        <div class="tl-header"><span class="tl-week">Months 3–9 (Launch)</span><span class="tag tag-blue">Launch</span></div>
+        <div class="tl-title">In-Person Kickoff + First Content Wave</div>
+        <div class="tl-body">Half-day in-person event in Bangalore co-hosted with senior India leader. Cohort: 20–30 ambassadors. Technical Specialist and People Manager personas prioritized. AP system live with India-specific rewards.</div>
+        <div class="tl-actions">
+          <span class="tl-chip">In-person kickoff (Bangalore)</span><span class="tl-chip">Cohort: 20–30</span><span class="tl-chip">EB Specialist: 20–25 hrs/wk</span><span class="tl-chip">Cross-regional buddy: India↔Brazil</span>
+        </div>
+      </div>
+      <div class="tl-item phase-2">
+        <div class="tl-dot"><div class="tl-dot-inner"></div></div>
+        <div class="tl-header"><span class="tl-week">Months 9–15 (Stable)</span><span class="tag tag-cyan">Stable</span></div>
+        <div class="tl-title">Community Building + KPI Milestone</div>
+        <div class="tl-body">Scale to 50+ ambassadors. Regional Ambassador Lead operational. EB Specialist shifts to coaching model (15–18 hrs/wk). 6-month NPS checkpoint — target ≥50. Business KPIs begin showing signal.</div>
+        <div class="tl-actions">
+          <span class="tl-chip">50+ ambassadors</span><span class="tl-chip">NPS ≥50</span><span class="tl-chip">Ambassador Lead elected</span>
+        </div>
+      </div>
+      <div class="tl-item phase-3">
+        <div class="tl-dot"><div class="tl-dot-inner"></div></div>
+        <div class="tl-header"><span class="tl-week">Months 15–18 (Scale)</span><span class="tag tag-green">Scaling</span></div>
+        <div class="tl-title">Self-Sustaining Community + Phase Transition</div>
+        <div class="tl-body">Transition to Scaled phase when: NPS ≥60, retention ≥85%, peer review operational without EB Specialist. 75+ ambassadors. EB Specialist moves to 8–10 hrs/wk strategic advisory.</div>
+        <div class="tl-actions">
+          <span class="tl-chip">75+ ambassadors</span><span class="tl-chip">NPS ≥60</span><span class="tl-chip">EB Specialist: 8–10 hrs/wk</span>
+        </div>
+      </div>
+    </div>
+    <div class="sec-header reveal"><div><div class="sec-title">India EVP Emphasis</div><div class="sec-sub">Content themes that resonate in Bangalore's LinkedIn market</div></div></div>
+    <div class="g2 reveal" style="margin-bottom:1rem">
+      <div class="card"><div style="font-weight:700;color:var(--cyan);margin-bottom:3px">🚀 Career Growth & Scale</div><div style="font-size:12.5px;color:var(--text-muted)">Concrete growth stories, visible career trajectories. India talent prioritizes rapid advancement.</div></div>
+      <div class="card"><div style="font-weight:700;color:var(--cyan);margin-bottom:3px">⚙️ Technical Excellence</div><div style="font-size:12.5px;color:var(--text-muted)">Engineering capabilities, certifications, learning programs. Key differentiator in Bangalore market.</div></div>
+      <div class="card"><div style="font-weight:700;color:var(--cyan);margin-bottom:3px">🌍 Global Exposure</div><div style="font-size:12.5px;color:var(--text-muted)">Working with global clients and teams. High-value EVP claim — prioritize international project stories.</div></div>
+      <div class="card"><div style="font-weight:700;color:var(--cyan);margin-bottom:3px">🌈 Inclusion & Belonging</div><div style="font-size:12.5px;color:var(--text-muted)">LGBTQ+ ERG visibility, women in tech, diversity spotlights. High-engagement in India LinkedIn tech community.</div></div>
+    </div>
+  </div>
+
+  <!-- STAKEHOLDERS PANEL -->
+  <div class="rm-panel" id="rm-stakeholders">
+    <div class="sec-header reveal"><div><div class="sec-title">Vital Stakeholders & Executive Ask</div><div class="sec-sub">Who needs to be aligned, and what is expected of each role</div></div></div>
+    <div class="reveal" style="overflow-x:auto">
+    <table class="stake-table">
+      <thead><tr><th>Stakeholder</th><th>Scope</th><th>Role in Program</th><th>Executive Ask</th></tr></thead>
+      <tbody>
+        <tr><td><strong>VP Global Marketing</strong></td><td><span class="tag tag-purple">Global</span></td><td>Executive Sponsor &amp; escalation authority</td><td>Approve expansion budget; champion program at leadership forums</td></tr>
+        <tr><td><strong>HR Americas Lead</strong></td><td><span class="tag tag-blue">Americas</span></td><td>People strategy alignment; HR BP coordination</td><td>Nominate Country EB Focal Points; facilitate manager approvals</td></tr>
+        <tr><td><strong>Country Managers (AR/MX/CR)</strong></td><td><span class="tag tag-amber">LATAM</span></td><td>In-country sponsorship &amp; access</td><td>Kick-off attendance; one ambassador spotlight per quarter on LinkedIn</td></tr>
+        <tr><td><strong>EB Specialist — Americas</strong></td><td><span class="tag tag-cyan">Americas</span></td><td>Program owner: launch &amp; stable phases</td><td>Commit 15–20 hrs/wk launch; deliver onboarding &amp; monthly cadence</td></tr>
+        <tr><td><strong>India HR Leadership</strong></td><td><span class="tag tag-purple">India</span></td><td>Program sponsorship; pipeline access</td><td>Co-host kickoff event; approve ambassador selections</td></tr>
+        <tr><td><strong>EB Specialist — Bangalore</strong></td><td><span class="tag tag-cyan">India</span></td><td>India program owner (to be hired by M7)</td><td>Critical path: must be confirmed before any India activation</td></tr>
+        <tr><td><strong>CPO Recruitment</strong></td><td><span class="tag tag-blue">Americas + India</span></td><td>TA integration; application signal tracking</td><td>Share application signal data; integrate with recruitment campaigns</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+
+</div>
+</section>
+
+<!-- ══ SECTION 2 — KPIs ═══════════════════════ -->
+<section id="kpis" class="content-section">
+<div class="section-divider">
+  <div class="sec-badge">02</div>
+  <h2>KPI Tracker</h2>
+  <p>Business and program KPIs — targets, cadence, and data sources</p>
+</div>
+<div class="container">
+  <div class="kpi-tabs" id="kpiTabs">
+    <button class="kpi-tab active" data-panel="kp-business">📊 Business KPIs</button>
+    <button class="kpi-tab" data-panel="kp-program">⚙️ Program KPIs</button>
+    <button class="kpi-tab" data-panel="kp-health">🏥 Health Indicators</button>
+  </div>
+
+  <!-- BUSINESS KPIs -->
+  <div class="kpi-panel active" id="kp-business">
+    <div class="alert alert-amber reveal">
+      <div>📅</div><div><strong>Cadence: Semiannual</strong> Business KPIs require input from HR Analytics and TA teams. Tracked vs. pre-program baselines.</div>
+    </div>
+    <div class="metric-row reveal">
+      <div class="metric-icon">📉</div>
+      <div class="metric-info">
+        <div class="metric-name">Attrition Rate — Ambassador Cohort</div>
+        <div class="metric-desc">Ambassador cohort attrition vs. general population. Measures retention impact of the program.</div>
+      </div>
+      <div class="metric-right">
+        <div class="metric-target">-2% to -5%</div>
+        <div class="metric-freq">Semiannual · HR Analytics</div>
+        <div class="metric-track"><div class="metric-fill" style="width:40%"></div></div>
+      </div>
+    </div>
+    <div class="metric-row reveal">
+      <div class="metric-icon">📈</div>
+      <div class="metric-info">
+        <div class="metric-name">Application Signals Growth Rate</div>
+        <div class="metric-desc">% growth in career page visits and applications attributed to ambassador content via UTM links.</div>
+      </div>
+      <div class="metric-right">
+        <div class="metric-target">+5% to +10%</div>
+        <div class="metric-freq">Semiannual · Sprinklr + Careers</div>
+        <div class="metric-track"><div class="metric-fill" style="width:60%"></div></div>
+      </div>
+    </div>
+    <div class="metric-row reveal">
+      <div class="metric-icon">🔗</div>
+      <div class="metric-info">
+        <div class="metric-name">Content-to-Careers CTR</div>
+        <div class="metric-desc">Click-through rate from ambassador posts to careers.cognizant.com. Tracks conversion from content to intent.</div>
+      </div>
+      <div class="metric-right">
+        <div class="metric-target">2%–5% or +20% vs. baseline</div>
+        <div class="metric-freq">Semiannual · UTM / Sprinklr</div>
+        <div class="metric-track"><div class="metric-fill" style="width:50%"></div></div>
+      </div>
+    </div>
+    <div class="metric-row reveal">
+      <div class="metric-icon">👥</div>
+      <div class="metric-info">
+        <div class="metric-name">Talent Community Sign-ups</div>
+        <div class="metric-desc">New sign-ups to Cognizant talent community attributed to ambassador content. Measures top-of-funnel pipeline building.</div>
+      </div>
+      <div class="metric-right">
+        <div class="metric-target">+15% to +25%</div>
+        <div class="metric-freq">Semiannual · CRM Platform</div>
+        <div class="metric-track"><div class="metric-fill" style="width:35%"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROGRAM KPIs -->
+  <div class="kpi-panel" id="kp-program">
+    <div class="g2 reveal" style="margin-bottom:1rem">
+      <div class="alert alert-cyan" style="margin:0"><div>📅</div><div><strong>Monthly KPIs</strong> Content volume, brand safety, active/inactive ratio.</div></div>
+      <div class="alert alert-green" style="margin:0"><div>📅</div><div><strong>Quarterly KPIs</strong> Ambassador NPS, content by persona, engagement by format.</div></div>
+    </div>
+    <div class="metric-row reveal">
+      <div class="metric-icon">📝</div>
+      <div class="metric-info">
+        <div class="metric-name">Content Volume & Consistency</div>
+        <div class="metric-desc">Posts published per ambassador per month. Measures program activity and editorial calendar adherence.</div>
+      </div>
+      <div class="metric-right">
+        <div class="metric-target">≥2 posts/amb/month</div>
+        <div class="metric-freq">Monthly · Sprinklr</div>
+        <div class="metric-track"><div class="metric-fill" style="width:80%"></div></div>
+      </div>
+    </div>
+    <div class="metric-row reveal">
+      <div class="metric-icon">✅</div>
+      <div class="metric-info">
+        <div class="metric-name">On-Time Delivery Rate</div>
+        <div class="metric-desc">% of posts published on or before editorial calendar date. Tracks operational discipline.</div>
+      </div>
+      <div class="metric-right">
+        <div class="metric-target">≥80% on-time</div>
+        <div class="metric-freq">Monthly · Editorial vs. Publish date</div>
+        <div class="metric-track"><div class="metric-fill" style="width:80%"></div></div>
+      </div>
+    </div>
+    <div class="metric-row reveal">
+      <div class="metric-icon">🛡️</div>
+      <div class="metric-info">
+        <div class="metric-name">Brand Safety Rate</div>
+        <div class="metric-desc">% of posts requiring edit or takedown. Measures compliance with code of conduct and red-list guidelines.</div>
+      </div>
+      <div class="metric-right">
+        <div class="metric-target">&lt;2% flagged</div>
+        <div class="metric-freq">Monthly · EB Specialist log</div>
+        <div class="metric-track"><div class="metric-fill" style="width:95%;background:linear-gradient(90deg,var(--green),var(--cyan))"></div></div>
+      </div>
+    </div>
+    <div class="metric-row reveal">
+      <div class="metric-icon">⭐</div>
+      <div class="metric-info">
+        <div class="metric-name">Ambassador NPS</div>
+        <div class="metric-desc">Net Promoter Score from structured ambassador survey. Primary measure of program satisfaction and retention intent.</div>
+      </div>
+      <div class="metric-right">
+        <div class="metric-target">≥50 NPS</div>
+        <div class="metric-freq">Quarterly · NPS Survey</div>
+        <div class="metric-track"><div class="metric-fill" style="width:70%"></div></div>
+      </div>
+    </div>
+    <div class="metric-row reveal">
+      <div class="metric-icon">🔒</div>
+      <div class="metric-info">
+        <div class="metric-name">Ambassador Network Retention</div>
+        <div class="metric-desc">% of onboarded ambassadors still active at 6-month mark. Key indicator of community health and program value.</div>
+      </div>
+      <div class="metric-right">
+        <div class="metric-target">≥85% at 6 months</div>
+        <div class="metric-freq">Semiannual · EB Specialist roster</div>
+        <div class="metric-track"><div class="metric-fill" style="width:85%"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HEALTH INDICATORS -->
+  <div class="kpi-panel" id="kp-health">
+    <div class="g2 reveal" style="margin-bottom:1.5rem">
+      <div class="card">
+        <div style="font-weight:700;color:var(--white);margin-bottom:.5rem">📊 Onboarding Completion Rate</div>
+        <div style="font-size:12.5px;color:var(--text-muted);line-height:1.65">% of nominated ambassadors who completed full onboarding: all sessions, toolkit review, first post published.</div>
+        <div style="margin-top:.75rem"><span class="tag tag-green">Target: ≥90%</span></div>
+      </div>
+      <div class="card">
+        <div style="font-weight:700;color:var(--white);margin-bottom:.5rem">🟢🟡🔴 Active vs. Inactive</div>
+        <div style="font-size:12.5px;color:var(--text-muted);line-height:1.65">Active: ≥1 post in 30 days. Inactive: no post in 31–60 days. At-risk: 61+ days. Alert if &gt;15% inactive.</div>
+        <div style="margin-top:.75rem"><span class="tag tag-amber">Alert: &gt;15% inactive</span></div>
+      </div>
+      <div class="card">
+        <div style="font-weight:700;color:var(--white);margin-bottom:.5rem">🎭 Content Output by Persona</div>
+        <div style="font-size:12.5px;color:var(--text-muted);line-height:1.65">Posts broken down by persona type: Recruiter, Technical, Manager, Early Talent, ERG, Internal Influencer. Identifies gaps.</div>
+        <div style="margin-top:.75rem"><span class="tag tag-cyan">Monthly · Sprinklr</span></div>
+      </div>
+      <div class="card">
+        <div style="font-weight:700;color:var(--white);margin-bottom:.5rem">🎥 Engagement by Format</div>
+        <div style="font-size:12.5px;color:var(--text-muted);line-height:1.65">Engagement rate by: text, photo, carousel, video, article. Used to optimize the regional editorial calendar.</div>
+        <div style="margin-top:.75rem"><span class="tag tag-cyan">Monthly · LinkedIn Analytics</span></div>
+      </div>
+      <div class="card">
+        <div style="font-weight:700;color:var(--white);margin-bottom:.5rem">⏱️ EB Specialist Hours vs. Benchmark</div>
+        <div style="font-size:12.5px;color:var(--text-muted);line-height:1.65">Actual hours logged vs. phase benchmark. Launch: 20–25 hrs. Stable: 8–12 hrs. Scaled: 4–6 hrs.</div>
+        <div style="margin-top:.75rem"><span class="tag tag-purple">Monthly · EB Specialist log</span></div>
+      </div>
+      <div class="card">
+        <div style="font-weight:700;color:var(--white);margin-bottom:.5rem">💬 30-Day NPS Checkpoint</div>
+        <div style="font-size:12.5px;color:var(--text-muted);line-height:1.65">Structured 1:1 at 30 days post-onboarding. 20 mins. NPS &lt;7 triggers immediate follow-up. Brazil's highest-impact governance practice.</div>
+        <div style="margin-top:.75rem"><span class="tag tag-green">Per cohort · EB Specialist</span></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</section>
+
+<!-- ══ SECTION 3 — MILESTONES ═════════════════ -->
+<section id="milestones" class="content-section">
+<div class="section-divider">
+  <div class="sec-badge">03</div>
+  <h2>Milestones &amp; RAG Status</h2>
+  <p>Strategic milestones tracker — Red / Amber / Green with blockers and dependencies</p>
+</div>
+<div class="container">
+  <div class="filter-row reveal" id="ragFilters">
+    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn" data-filter="Green">🟢 Green</button>
+    <button class="filter-btn" data-filter="Amber">🟡 Amber</button>
+    <button class="filter-btn" data-filter="Red">🔴 Red</button>
+    <button class="filter-btn" data-filter="LATAM">🌎 LATAM</button>
+    <button class="filter-btn" data-filter="Canada">🇨🇦 Canada</button>
+    <button class="filter-btn" data-filter="India">🇮🇳 India</button>
+    <button class="filter-btn" data-filter="Global">🌐 Global</button>
+  </div>
+
+  <div id="ragList">
+    <div class="rag-item reveal" data-status="Green" data-region="LATAM">
+      <div class="rag-main">
+        <div><div class="rag-name">LATAM Stakeholder Alignment</div><div class="rag-region">LATAM · All Countries</div></div>
+        <div class="rag-date">Month 1</div>
+        <div class="rag-status Green">Green</div>
+      </div>
+      <div class="rag-note">Country Managers and HR Americas briefings in progress. Budget line confirmed with VP.</div>
+    </div>
+    <div class="rag-item reveal" data-status="Green" data-region="LATAM">
+      <div class="rag-main">
+        <div><div class="rag-name">Spanish Toolkit Ready</div><div class="rag-region">LATAM · All Countries</div></div>
+        <div class="rag-date">Month 2</div>
+        <div class="rag-status Green">Green</div>
+      </div>
+      <div class="rag-note">EB Specialist Americas leads. Translation support identified. Terminology review per country planned.</div>
+    </div>
+    <div class="rag-item reveal" data-status="Amber" data-region="LATAM">
+      <div class="rag-main">
+        <div><div class="rag-name">LATAM Onboarding Sessions Complete</div><div class="rag-region">LATAM · AR + MX + CR</div></div>
+        <div class="rag-date">Months 2–3</div>
+        <div class="rag-status Amber">Amber</div>
+      </div>
+      <div class="rag-note">⚠️ Dependent on ambassador pipeline confirmation from each country HR BP. Manager approval process in progress.</div>
+    </div>
+    <div class="rag-item reveal" data-status="Amber" data-region="LATAM">
+      <div class="rag-main">
+        <div><div class="rag-name">LATAM First Content Wave Published</div><div class="rag-region">LATAM · All Countries</div></div>
+        <div class="rag-date">Month 3</div>
+        <div class="rag-status Amber">Amber</div>
+      </div>
+      <div class="rag-note">⚠️ Dependent on onboarding completion. UTM schema must be finalized before first posts go live.</div>
+    </div>
+    <div class="rag-item reveal" data-status="Green" data-region="Canada">
+      <div class="rag-main">
+        <div><div class="rag-name">Canada Joint Session (BR + CA)</div><div class="rag-region">Canada · Brazil</div></div>
+        <div class="rag-date">Month 2</div>
+        <div class="rag-status Green">Green</div>
+      </div>
+      <div class="rag-note">Scheduling in progress with Canada Content Creators team. Bilingual facilitation confirmed.</div>
+    </div>
+    <div class="rag-item reveal" data-status="Amber" data-region="Canada">
+      <div class="rag-main">
+        <div><div class="rag-name">Canada Co-Creation Content Q1</div><div class="rag-region">Canada · Brazil</div></div>
+        <div class="rag-date">Month 4</div>
+        <div class="rag-status Amber">Amber</div>
+      </div>
+      <div class="rag-note">⚠️ Dependent on joint session output and content brief approval. First co-creation brief in development.</div>
+    </div>
+    <div class="rag-item reveal" data-status="Amber" data-region="India">
+      <div class="rag-main">
+        <div><div class="rag-name">India EB Specialist Hired / Assigned</div><div class="rag-region">India · Bangalore</div></div>
+        <div class="rag-date">Month 7 (Program)</div>
+        <div class="rag-status Amber">Amber</div>
+      </div>
+      <div class="rag-note">⚠️ CRITICAL PATH — blocks all India activation. HR India and Global EB&amp;M must confirm resource allocation before this date. No India launch is possible without this role.</div>
+    </div>
+    <div class="rag-item reveal" data-status="Amber" data-region="India">
+      <div class="rag-main">
+        <div><div class="rag-name">India Stakeholder Alignment Complete</div><div class="rag-region">India · Bangalore</div></div>
+        <div class="rag-date">Month 8</div>
+        <div class="rag-status Amber">Amber</div>
+      </div>
+      <div class="rag-note">⚠️ Requires India HR Leadership formal sponsorship and local Bangalore leadership co-host commitment for kickoff event.</div>
+    </div>
+    <div class="rag-item reveal" data-status="Amber" data-region="India">
+      <div class="rag-main">
+        <div><div class="rag-name">India Launch Cohort Onboarded</div><div class="rag-region">India · Bangalore</div></div>
+        <div class="rag-date">Months 9–10</div>
+        <div class="rag-status Amber">Amber</div>
+      </div>
+      <div class="rag-note">⚠️ Dependent on EB Specialist being in place and ambassador pipeline validated (20+ nominees confirmed).</div>
+    </div>
+    <div class="rag-item reveal" data-status="Amber" data-region="India">
+      <div class="rag-main">
+        <div><div class="rag-name">India 6-Month NPS Checkpoint</div><div class="rag-region">India · Bangalore</div></div>
+        <div class="rag-date">Month 15</div>
+        <div class="rag-status Amber">Amber</div>
+      </div>
+      <div class="rag-note">First India maturity assessment. Target NPS ≥50. Phase 2→3 transition decision based on results.</div>
+    </div>
+    <div class="rag-item reveal" data-status="Green" data-region="Global">
+      <div class="rag-main">
+        <div><div class="rag-name">Global Playbook v1.0 Published</div><div class="rag-region">Global · EB&amp;M Team</div></div>
+        <div class="rag-date">Month 6</div>
+        <div class="rag-status Green">Green</div>
+      </div>
+      <div class="rag-note">EB&amp;M team owns. Informed by LATAM launch learnings. Regional Annexes added as each market activates.</div>
+    </div>
+    <div class="rag-item reveal" data-status="Amber" data-region="Global">
+      <div class="rag-main">
+        <div><div class="rag-name">Romania / UK&amp;I / Spain-PT Go/No-Go</div><div class="rag-region">Global · Horizon Regions</div></div>
+        <div class="rag-date">Month 18</div>
+        <div class="rag-status Amber">Amber</div>
+      </div>
+      <div class="rag-note">Decision pending LATAM and India maturity assessment results. All 6 readiness criteria must be confirmed per region before activation.</div>
+    </div>
+  </div>
+
+</div>
+</section>
+
+<!-- ══ SECTION 4 — GLOBAL STRATEGY ════════════ -->
+<section id="strategy" class="content-section">
+<div class="section-divider">
+  <div class="sec-badge">04</div>
+  <h2>Global Strategy</h2>
+  <p>Scalability framework, governance matrix, and the EB Specialist transition model</p>
+</div>
+<div class="container">
+
+  <!-- PHASE MODEL -->
+  <div class="sec-header reveal"><div><div class="sec-title">EB Specialist Maturity Model</div><div class="sec-sub">Three phases — the transition from high-touch to self-sustaining community</div></div></div>
+  <div class="phase-cards">
+    <div class="phase-card pc-1 reveal">
+      <div class="pc-label">Phase 1</div>
+      <div class="pc-phase">Launch</div>
+      <span class="pc-hrs">20–25 hrs</span>
+      <div class="pc-bar"></div>
+      <ul class="pc-items">
+        <li>EB Specialist is the program</li>
+        <li>Leads all onboarding sessions</li>
+        <li>Owns editorial calendar</li>
+        <li>Reviews all content</li>
+        <li>Manages all stakeholder comms</li>
+        <li>High-touch: 0–3 months</li>
+      </ul>
+    </div>
+    <div class="phase-card pc-2 reveal">
+      <div class="pc-label">Phase 2</div>
+      <div class="pc-phase">Stable</div>
+      <span class="pc-hrs">8–12 hrs</span>
+      <div class="pc-bar"></div>
+      <ul class="pc-items">
+        <li>EB Specialist as coach</li>
+        <li>Ambassador Lead owns day-to-day</li>
+        <li>AI tools handle brief generation</li>
+        <li>Peer review model active</li>
+        <li>KPI review + escalation focus</li>
+        <li>Coaching: 3–9 months</li>
+      </ul>
+    </div>
+    <div class="phase-card pc-3 reveal">
+      <div class="pc-label">Phase 3</div>
+      <div class="pc-phase">Scaled</div>
+      <span class="pc-hrs">4–6 hrs</span>
+      <div class="pc-bar"></div>
+      <ul class="pc-items">
+        <li>EB Specialist as advisor</li>
+        <li>Community self-sustains</li>
+        <li>Monthly cadence: peer-led</li>
+        <li>Quarterly strategic review</li>
+        <li>Playbook contribution</li>
+        <li>Scaled: 9+ months</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SCALE VS EVOLVE -->
+  <div class="sec-header reveal"><div><div class="sec-title">What Must Scale vs. What Must Evolve</div><div class="sec-sub">Non-negotiables that protect program quality at every scale</div></div></div>
+  <div class="sev-grid reveal">
+    <div class="sev-col">
+      <div class="sev-header" style="background:rgba(0,214,143,.2);border-bottom:1px solid rgba(0,214,143,.2)">
+        <span style="font-size:1.1rem">🔒</span> Non-Negotiable at Any Scale
+      </div>
+      <div class="sev-body">
+        <div class="sev-item"><span class="sev-icon">✅</span>Robust onboarding with live EB Specialist session</div>
+        <div class="sev-item"><span class="sev-icon">✅</span>Clear toolkits &amp; templates (localized)</div>
+        <div class="sev-item"><span class="sev-icon">✅</span>Gamification engine (AP system, levels, missions)</div>
+        <div class="sev-item"><span class="sev-icon">✅</span>Buddy system (1:1 or cohort at scale)</div>
+        <div class="sev-item"><span class="sev-icon">✅</span>Brand safety guardrails — zero exceptions</div>
+        <div class="sev-item"><span class="sev-icon">✅</span>Monthly editorial calendar (30 days in advance)</div>
+      </div>
+    </div>
+    <div class="sev-col">
+      <div class="sev-header" style="background:rgba(26,110,255,.2);border-bottom:1px solid rgba(26,110,255,.2)">
+        <span style="font-size:1.1rem">⚙️</span> High-Touch → Systematize
+      </div>
+      <div class="sev-body">
+        <div class="sev-item"><span class="sev-icon">→</span>EB Specialist lead → Country Focal Point (Year 1)</div>
+        <div class="sev-item"><span class="sev-icon">→</span>Individual content review → AI pre-screen + peer review</div>
+        <div class="sev-item"><span class="sev-icon">→</span>Manual reporting → Dashboard + Power Automate</div>
+        <div class="sev-item"><span class="sev-icon">→</span>1:1 check-ins → Group NPS survey (50+ amb)</div>
+        <div class="sev-item"><span class="sev-icon">→</span>Content briefs → AI-generated (Copilot/Gemini)</div>
+        <div class="sev-item"><span class="sev-icon">→</span>AP tracking → Teams bot queries</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GOVERNANCE MATRIX -->
+  <div class="sec-header reveal"><div><div class="sec-title">Global vs. Regional Ownership Matrix</div><div class="sec-sub">30% global themes / 70% regional stories</div></div></div>
+  <div class="reveal" style="overflow-x:auto;margin-bottom:1.5rem">
+  <table class="gov-table">
+    <thead><tr><th>Governance Item</th><th>Owner</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td>Program Standards &amp; KPI Definitions</td><td><span class="owner-global">Global EB&amp;M</span></td><td>Applies globally — no regional exceptions</td></tr>
+      <tr><td>Brand Safety Protocol &amp; Red-List Topics</td><td><span class="owner-global">Global EB&amp;M</span></td><td>Regional additions permitted with Global approval</td></tr>
+      <tr><td>Gamification Rules (AP, Levels, Badges)</td><td><span class="owner-global">Global EB&amp;M</span></td><td>Rules standardized globally; reward catalog regional</td></tr>
+      <tr><td>Global Content Themes (30%)</td><td><span class="owner-global">Global EB&amp;M</span></td><td>Published quarterly. Regions adapt — not replace</td></tr>
+      <tr><td>Ambassador Code of Conduct</td><td><span class="owner-global">Global EB&amp;M</span></td><td>Signed by all ambassadors at onboarding. NDA included</td></tr>
+      <tr><td>Reporting Format &amp; Cadence to VP</td><td><span class="owner-global">Global EB&amp;M</span></td><td>Monthly snapshot + quarterly + semiannual business report</td></tr>
+      <tr><td>Regional Content Calendar (70%)</td><td><span class="owner-regional">Regional EB Specialist</span></td><td>Local stories, EVP themes, country-specific moments</td></tr>
+      <tr><td>Local Ambassador Selection &amp; Onboarding</td><td><span class="owner-regional">Regional EB Specialist</span></td><td>Within global criteria. Final selection confirmed by Global</td></tr>
+      <tr><td>Local Reward Catalog</td><td><span class="owner-regional">Regional + HR</span></td><td>Within AP system rules. HR-approved, locally relevant</td></tr>
+      <tr><td>Stakeholder Engagement (Country Mgr, HR)</td><td><span class="owner-regional">Regional EB Specialist</span></td><td>Escalate to Global only if sponsorship at risk</td></tr>
+      <tr><td>Legal / Privacy Compliance</td><td><span class="owner-regional">Regional + Legal</span></td><td>GDPR (EU), LGPD (Brazil), DPDP Act (India)</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <!-- AI AUTOMATION -->
+  <div class="sec-header reveal"><div><div class="sec-title">AI Automation Architecture</div><div class="sec-sub">Copilot / Gemini agents that reduce EB Specialist hours</div></div></div>
+  <div class="g2 reveal">
+    <div class="card"><div style="font-weight:700;color:var(--cyan);margin-bottom:4px">✍️ Content Brief Generator</div><div style="font-size:11px;color:var(--purple2);margin-bottom:6px">Copilot (Teams)</div><div style="font-size:12.5px;color:var(--text-muted);line-height:1.65">Ambassador inputs persona + theme → 3 brief options with headline, key messages, CTA. 30 min → 5 min per ambassador.</div></div>
+    <div class="card"><div style="font-weight:700;color:var(--cyan);margin-bottom:4px">🛡️ Brand Safety Checker</div><div style="font-size:11px;color:var(--purple2);margin-bottom:6px">Copilot / Gemini (Sprinklr)</div><div style="font-size:12.5px;color:var(--text-muted);line-height:1.65">Draft submitted → agent checks red-list, EVP alignment, tone → Green/Amber/Red signal. Reduces EB Specialist review by ~40%.</div></div>
+    <div class="card"><div style="font-weight:700;color:var(--cyan);margin-bottom:4px">📊 Monthly Digest</div><div style="font-size:11px;color:var(--purple2);margin-bottom:6px">Power Automate + Copilot</div><div style="font-size:12.5px;color:var(--text-muted);line-height:1.65">Auto-compiles Sprinklr data → formats into regional snapshot → emails EB Specialist + VP. Eliminates manual monthly reporting.</div></div>
+    <div class="card"><div style="font-weight:700;color:var(--cyan);margin-bottom:4px">🏆 Mission Tracker Bot</div><div style="font-size:11px;color:var(--purple2);margin-bottom:6px">Teams Bot (Copilot)</div><div style="font-size:12.5px;color:var(--text-muted);line-height:1.65">"How many AP points do I have?" → bot responds with score, level, next 3 available missions. Reduces admin queries to EB Specialist.</div></div>
+    <div class="card"><div style="font-weight:700;color:var(--cyan);margin-bottom:4px">📋 Onboarding Checklist Bot</div><div style="font-size:11px;color:var(--purple2);margin-bottom:6px">Copilot (Teams)</div><div style="font-size:12.5px;color:var(--text-muted);line-height:1.65">New ambassador gets auto-checklist Day 1. Bot tracks completion, sends reminders, alerts EB Specialist when stalled &gt;72 hours.</div></div>
+    <div class="card"><div style="font-weight:700;color:var(--cyan);margin-bottom:4px">📈 Engagement Optimizer</div><div style="font-size:11px;color:var(--purple2);margin-bottom:6px">Gemini (Sprinklr integration)</div><div style="font-size:12.5px;color:var(--text-muted);line-height:1.65">Weekly analysis of top-performing content by region → auto-suggests format and theme recommendations for next editorial cycle.</div></div>
+  </div>
+
+</div>
+</section>
+
+<!-- ══ SECTION 5 — ENGAGEMENT ═════════════════ -->
+<section id="engagement" class="content-section">
+<div class="section-divider">
+  <div class="sec-badge">05</div>
+  <h2>Engagement Model</h2>
+  <p>Gamification, content flow, buddy system, and the ambassador journey from Bronze to Diamond</p>
+</div>
+<div class="container">
+
+  <!-- LEVEL TRACK -->
+  <div class="sec-header reveal"><div><div class="sec-title">Ambassador Level Progression</div><div class="sec-sub">Bronze → Silver → Gold → Diamond — standardized globally, recognized locally</div></div></div>
+  <div class="level-track reveal">
+    <div class="level-item lv-bronze">
+      <div class="level-badge">🥉</div>
+      <div class="level-name">Bronze</div>
+      <div class="level-pts">0–499 AP</div>
+    </div>
+    <div class="level-item lv-silver">
+      <div class="level-badge">🥈</div>
+      <div class="level-name">Silver</div>
+      <div class="level-pts">500–999 AP</div>
+    </div>
+    <div class="level-item lv-gold">
+      <div class="level-badge">🥇</div>
+      <div class="level-name">Gold</div>
+      <div class="level-pts">1000–1999 AP</div>
+    </div>
+    <div class="level-item lv-diamond">
+      <div class="level-badge">💎</div>
+      <div class="level-name">Diamond</div>
+      <div class="level-pts">2000+ AP · Top 5%</div>
+    </div>
+  </div>
+
+  <!-- CONTENT FLOW -->
+  <div class="sec-header reveal"><div><div class="sec-title">Monthly Operating Flow</div><div class="sec-sub">Editorial planning → content creation → review → publish → amplify → report</div></div></div>
+  <div class="flow-steps reveal">
+    <div class="flow-step">
+      <div class="flow-arrow">›</div>
+      <div class="flow-num">1</div>
+      <div class="flow-title">Editorial Brief</div>
+      <div class="flow-note">EB Specialist publishes monthly brief. 30% global + 70% regional themes.</div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-arrow">›</div>
+      <div class="flow-num">2</div>
+      <div class="flow-title">Create</div>
+      <div class="flow-note">Ambassadors produce content. AI brief assist available. EB Specialist on-call.</div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-arrow">›</div>
+      <div class="flow-num">3</div>
+      <div class="flow-title">Review</div>
+      <div class="flow-note">AI pre-screen → Peer review (Ambassador Lead) → EB Specialist brand check.</div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-arrow">›</div>
+      <div class="flow-num">4</div>
+      <div class="flow-title">Publish</div>
+      <div class="flow-note">UTM links applied. Scheduled via Sprinklr. Posted on editorial calendar date.</div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-arrow">›</div>
+      <div class="flow-num">5</div>
+      <div class="flow-title">Amplify</div>
+      <div class="flow-note">EB Specialist + leaders amplify within 2 hours. Cheers points awarded.</div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-num">6</div>
+      <div class="flow-title">Report</div>
+      <div class="flow-note">Monthly metrics compiled. Dashboard updated. VP snapshot delivered.</div>
+    </div>
+  </div>
+
+  <!-- MISSIONS -->
+  <div class="sec-header reveal"><div><div class="sec-title">Ambassador Missions</div><div class="sec-sub">Point-earning challenges — globally standardized, regionally adapted</div></div></div>
+  <div class="mission-grid reveal">
+    <div class="mission-card">
+      <div class="mission-icon">📝</div>
+      <div class="mission-name">First Post</div>
+      <div class="mission-desc">Publish your first ambassador post. Unlock Bronze badge.</div>
+      <span class="mission-pts">+100 AP</span>
+    </div>
+    <div class="mission-card">
+      <div class="mission-icon">🎥</div>
+      <div class="mission-name">Video Story</div>
+      <div class="mission-desc">Create a short-form video sharing your Cognizant experience.</div>
+      <span class="mission-pts">+150 AP</span>
+    </div>
+    <div class="mission-card">
+      <div class="mission-icon">🤝</div>
+      <div class="mission-name">Cross-Regional Collab</div>
+      <div class="mission-desc">Co-create content with an ambassador from another region.</div>
+      <span class="mission-pts">+200 AP</span>
+    </div>
+    <div class="mission-card">
+      <div class="mission-icon">⚙️</div>
+      <div class="mission-name">Technical Story (India)</div>
+      <div class="mission-desc">Post featuring your technical expertise, certifications, or project work.</div>
+      <span class="mission-pts">+150 AP</span>
+    </div>
+    <div class="mission-card">
+      <div class="mission-icon">👥</div>
+      <div class="mission-name">Mentor a Buddy</div>
+      <div class="mission-desc">Complete all buddy activities with your assigned new ambassador.</div>
+      <span class="mission-pts">+120 AP</span>
+    </div>
+    <div class="mission-card">
+      <div class="mission-icon">📅</div>
+      <div class="mission-name">Consistency Streak</div>
+      <div class="mission-desc">Publish ≥2 posts/month for 3 consecutive months.</div>
+      <span class="mission-pts">+300 AP</span>
+    </div>
+    <div class="mission-card">
+      <div class="mission-icon">🌟</div>
+      <div class="mission-name">LinkedIn Article</div>
+      <div class="mission-desc">Publish a long-form LinkedIn article on a professional topic.</div>
+      <span class="mission-pts">+200 AP</span>
+    </div>
+    <div class="mission-card">
+      <div class="mission-icon">🏆</div>
+      <div class="mission-name">Ambassador Lead Election</div>
+      <div class="mission-desc">Elected by peers as regional Ambassador Lead after 90+ days.</div>
+      <span class="mission-pts">+500 AP</span>
+    </div>
+  </div>
+
+  <!-- RECOGNITION CADENCE -->
+  <div class="sec-header reveal"><div><div class="sec-title">Recognition Cadence</div><div class="sec-sub">Minimum quarterly touchpoints per region</div></div></div>
+  <div class="g3 reveal" style="margin-bottom:1.5rem">
+    <div class="card" style="border-color:rgba(224,64,96,.25)">
+      <div style="font-size:1.2rem;margin-bottom:.4rem">🏅</div>
+      <div style="font-weight:700;color:var(--white);font-size:13px;margin-bottom:4px">Monthly</div>
+      <div style="font-size:12px;color:var(--text-muted);line-height:1.65">Digital badge + Cheers points for completed missions. Leaderboard update published on Viva Engage.</div>
+    </div>
+    <div class="card" style="border-color:rgba(155,93,229,.2)">
+      <div style="font-size:1.2rem;margin-bottom:.4rem">🌟</div>
+      <div style="font-weight:700;color:var(--white);font-size:13px;margin-bottom:4px">Quarterly</div>
+      <div style="font-size:12px;color:var(--text-muted);line-height:1.65">Public spotlight on Life at Cognizant LinkedIn page. Internal feature on Viva Engage. AMA session with VP Global Marketing.</div>
+    </div>
+    <div class="card" style="border-color:rgba(255,184,48,.2)">
+      <div style="font-size:1.2rem;margin-bottom:.4rem">💎</div>
+      <div style="font-weight:700;color:var(--white);font-size:13px;margin-bottom:4px">Annual</div>
+      <div style="font-size:12px;color:var(--text-muted);line-height:1.65">Diamond Ambassador recognition. Merch kit. Named spotlight on global Life at Cognizant page. Site event recognition (India + Brazil).</div>
+    </div>
+  </div>
+
+  <!-- SUNSET CRITERIA -->
+  <div class="alert alert-amber reveal">
+    <div>⚠️</div>
+    <div>
+      <strong>Sunset Criteria — When to Pause a Regional Activation</strong>
+      Ambassador retention &lt;60% at 6 months despite re-engagement · NPS &lt;30 for 2 consecutive quarters · Brand safety rate &gt;5% for 2 months · EB Specialist capacity &lt;8 hrs/wk with no plan to restore · Leadership sponsorship withdrawn and not replaced within 60 days · No measurable business KPI signal after 12 months of operation.
+      <br/><strong style="color:var(--text);display:block;margin-top:.4rem">Sunset ≠ failure. Paused regions retain all learnings. Ambassadors move to Alumni status with continued toolkit access.</strong>
+    </div>
+  </div>
+
+</div>
+</section>
+
+</main>
+
+<script>
+// ── WAVE BACKGROUND ────────────────────────────────────────────
+(function(){
+  const canvas = document.getElementById('waveCanvas');
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+  let t = 0;
+  function resize(){ canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+  window.addEventListener('resize', resize); resize();
+  function draw(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    for(let i=0;i<3;i++){
+      ctx.beginPath();
+      const amp = 60+i*30, freq = 0.003-i*0.0005, spd = 0.012+i*0.004, offset = i*1.5;
+      ctx.moveTo(0, canvas.height/2);
+      for(let x=0;x<canvas.width;x+=4){
+        const y = canvas.height/2 + amp*Math.sin(freq*x + t*spd + offset) + (amp/2)*Math.sin(freq*1.5*x - t*spd*0.7);
+        ctx.lineTo(x,y);
+      }
+      ctx.lineTo(canvas.width,canvas.height); ctx.lineTo(0,canvas.height); ctx.closePath();
+      const g = ctx.createLinearGradient(0,0,canvas.width,0);
+      const colors = [
+        ['rgba(91,31,191,0.28)','rgba(224,64,96,0.18)'],
+        ['rgba(32,64,200,0.22)','rgba(91,31,191,0.22)'],
+        ['rgba(224,64,96,0.14)','rgba(32,64,200,0.2)'],
+      ];
+      g.addColorStop(0,colors[i][0]); g.addColorStop(1,colors[i][1]);
+      ctx.fillStyle=g; ctx.fill();
+    }
+    t+=0.015; requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+// ── HERO CANVAS ────────────────────────────────────────────────
+(function(){
+  const canvas = document.getElementById('heroCanvas');
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const particles = [];
+  function resize(){ canvas.width = canvas.offsetWidth; canvas.height = canvas.offsetHeight; }
+  window.addEventListener('resize', resize); resize();
+  for(let i=0;i<50;i++) particles.push({
+    x: Math.random()*1400, y: Math.random()*600,
+    vx: (Math.random()-.5)*0.4, vy: (Math.random()-.5)*0.4,
+    r: Math.random()*2+0.5,
+    c: ['rgba(224,64,96,','rgba(91,31,191,','rgba(74,111,232,'][Math.floor(Math.random()*3)]
+  });
+  function draw(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    particles.forEach(p=>{
+      p.x+=p.vx; p.y+=p.vy;
+      if(p.x<0||p.x>canvas.width) p.vx*=-1;
+      if(p.y<0||p.y>canvas.height) p.vy*=-1;
+      ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle=p.c+'0.6)'; ctx.fill();
+    });
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+// ── SCROLL PROGRESS + NAV ──────────────────────────────────────
+const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('.nav-item[data-section]');
+const scrollProg = document.getElementById('scrollProg');
+const backTop = document.getElementById('backTop');
+window.addEventListener('scroll', ()=>{
+  const pos = window.scrollY;
+  const max = document.documentElement.scrollHeight - window.innerHeight;
+  scrollProg.style.transform = `scaleX(${pos/max})`;
+  backTop.classList.toggle('visible', pos > 400);
+  let current='';
+  sections.forEach(s=>{ if(pos >= s.offsetTop-100) current=s.id; });
+  navLinks.forEach(a=>a.classList.toggle('active', a.dataset.section===current));
+}, {passive:true});
+navLinks.forEach(a=>{
+  a.addEventListener('click', e=>{
+    e.preventDefault();
+    document.querySelector(a.getAttribute('href'))?.scrollIntoView({behavior:'smooth'});
+    document.getElementById('sidebar').classList.remove('open');
+  });
+});
+
+// ── MOBILE ─────────────────────────────────────────────────────
+document.getElementById('menuToggle').addEventListener('click',()=>{
+  document.getElementById('sidebar').classList.toggle('open');
+});
+
+// ── ROADMAP TABS ───────────────────────────────────────────────
+document.getElementById('rmTabs').addEventListener('click', e=>{
+  const btn = e.target.closest('.rm-tab');
+  if(!btn) return;
+  document.querySelectorAll('.rm-tab').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.rm-panel').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById(btn.dataset.panel).classList.add('active');
+});
+
+// ── KPI TABS ───────────────────────────────────────────────────
+document.getElementById('kpiTabs').addEventListener('click', e=>{
+  const btn = e.target.closest('.kpi-tab');
+  if(!btn) return;
+  document.querySelectorAll('.kpi-tab').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.kpi-panel').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById(btn.dataset.panel).classList.add('active');
+});
+
+// ── RAG FILTERS ────────────────────────────────────────────────
+document.getElementById('ragFilters').addEventListener('click', e=>{
+  const btn = e.target.closest('.filter-btn');
+  if(!btn) return;
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const filter = btn.dataset.filter;
+  document.querySelectorAll('.rag-item').forEach(item=>{
+    if(filter==='all') { item.style.display=''; return; }
+    const status = item.dataset.status;
+    const region = item.dataset.region;
+    item.style.display = (status===filter || region===filter) ? '' : 'none';
+  });
+});
+
+
+// ── GLOBAL SCALE SLIDER ────────────────────────────────────────
+(function(){
+  const track = document.getElementById('scaleTrack');
+  const fill  = document.getElementById('scaleFill');
+  const handle= document.getElementById('scaleHandle');
+  const pct   = document.getElementById('scalePct');
+  const status= document.getElementById('scaleStatus');
+  if(!track) return;
+
+  const stages = [
+    { max:10,  label:'Foundation — Brazil pilot model established' },
+    { max:28,  label:'Early Expansion — LATAM activation in progress' },
+    { max:45,  label:'Americas Aligned — LATAM + Canada networks connected' },
+    { max:65,  label:'Intercontinental — India Bangalore launch underway' },
+    { max:80,  label:'Multi-regional — 4 active regions, community building' },
+    { max:95,  label:'Near-Global — EU & UK activation in preparation' },
+    { max:100, label:'Full Global Scale — All regions active and self-sustaining' },
+  ];
+
+  function getStatus(v){
+    for(const s of stages) if(v <= s.max) return s.label;
+    return stages[stages.length-1].label;
+  }
+
+  function setVal(v){
+    v = Math.max(0, Math.min(100, Math.round(v)));
+    fill.style.width = v + '%';
+    handle.style.left = v + '%';
+    handle.setAttribute('aria-valuenow', v);
+    pct.textContent = v + '%';
+    status.textContent = getStatus(v);
+  }
+
+  function posToVal(clientX){
+    const rect = track.getBoundingClientRect();
+    return ((clientX - rect.left) / rect.width) * 100;
+  }
+
+  // Click on track
+  track.addEventListener('pointerdown', e=>{
+    if(e.target === handle) return;
+    setVal(posToVal(e.clientX));
+  });
+
+  // Drag handle
+  let dragging = false;
+  handle.addEventListener('pointerdown', e=>{
+    dragging = true;
+    handle.setPointerCapture(e.pointerId);
+    e.preventDefault();
+  });
+  handle.addEventListener('pointermove', e=>{
+    if(!dragging) return;
+    setVal(posToVal(e.clientX));
+  });
+  handle.addEventListener('pointerup', ()=>{ dragging = false; });
+
+  // Keyboard
+  handle.addEventListener('keydown', e=>{
+    const cur = parseInt(handle.getAttribute('aria-valuenow'));
+    if(e.key==='ArrowRight'||e.key==='ArrowUp') setVal(cur+2);
+    if(e.key==='ArrowLeft'||e.key==='ArrowDown') setVal(cur-2);
+    if(e.key==='Home') setVal(0);
+    if(e.key==='End')  setVal(100);
+  });
+})();
+
+// ── SCROLL REVEAL ──────────────────────────────────────────────
+const revealObs = new IntersectionObserver(entries=>{
+  entries.forEach((entry,i)=>{
+    if(entry.isIntersecting){
+      setTimeout(()=>{ entry.target.classList.add('in'); }, (i%6)*60);
+      revealObs.unobserve(entry.target);
+    }
+  });
+}, {threshold:0.07});
+document.querySelectorAll('.reveal, .card, .kpi-card, .region-card, .mission-card, .phase-card').forEach(el=>{
+  if(!el.classList.contains('reveal')) el.classList.add('reveal');
+  revealObs.observe(el);
+});
+</script>
+</body>
+</html>
